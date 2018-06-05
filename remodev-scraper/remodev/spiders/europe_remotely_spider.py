@@ -22,6 +22,4 @@ class EuropeRemotelySpider(scrapy.Spider):
             job["date"] = item.css("div.right::text").extract_first()
             job["tags"] = item.css("div.right a::text").extract()
 
-            self.log('Item: %s' % job)
-
-        
+            self.log('Job: %s' % job)
