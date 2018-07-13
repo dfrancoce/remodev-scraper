@@ -1,6 +1,6 @@
 import scrapy
 
-from remodev.items import Job
+from jobbie.items import Job
 
 class EuropeRemotelySpider(scrapy.Spider):
     name = "europeRemotely"
