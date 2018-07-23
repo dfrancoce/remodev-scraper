@@ -7,8 +7,7 @@ from models import JobOffer
 class Github(object):
     def get(self):
         url = "https://jobs.github.com/positions.json?location=remote"
-        ret = requests.get(url)
-        jobOffersJson = json.loads(ret.content)
+        jobOffersJson = getContentAsJson(url)
 
         jobOffers = []
         for job in jobOffersJson:
@@ -16,4 +15,22 @@ class Github(object):
             jobOffers.append(jobOffer)
 
         return jobOffers
-        
+
+class RemoteOk(object):
+    def get(self):
+        url = "https://remoteok.io/api"
+        jobOffersJson = getContentAsJson(url)
+
+        jobOffers = []
+        for job in jobOffersJson:
+            if ('legal' in job):
+                continue
+
+            jobOffer = JobOffer(job["url"], job["position"], job["description"], job["company"], job["date"], job["tags"])
+            jobOffers.append(jobOffer)
+
+        return jobOffers
+
+def getContentAsJson(url):
+    ret = requests.get(url)
+    return json.loads(ret.content)
