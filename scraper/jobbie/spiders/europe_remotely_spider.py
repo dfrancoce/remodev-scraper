@@ -3,6 +3,8 @@ import scrapy
 from jobbie.items import Job
 
 class EuropeRemotelySpider(scrapy.Spider):
+    """ This class crawls the remote jobs in europeRemotely """
+
     name = "europeRemotely"
 
     def start_requests(self):

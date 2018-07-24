@@ -3,6 +3,8 @@ import scrapy
 from jobbie.items import Job
 
 class RemoteListIoSpider(scrapy.Spider):
+    """ This class crawls the remote jobs in remotelist """
+
     name = "remotelistio"
 
     def start_requests(self):
