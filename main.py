@@ -1,4 +1,6 @@
+import requests
 import scrapy
+import json
 
 from twisted.internet import reactor, defer
 from scrapy.crawler import CrawlerRunner
@@ -18,6 +20,11 @@ def main():
     runSpidersCollector()
     runApisCollector()
     runRsssCollector()
+
+    headers = {'Content-Type': 'application/json', 'Accept':'application/json'}
+    for jobOffer in results:
+        resultsJSON = json.dumps(jobOffer.__dict__)
+        requests.post('http://127.0.0.1:5000/jobs', json = resultsJSON, headers = headers)
 
 def runApisCollector():
     """ Runs the API collectors and saves the collected job offers in the results object"""
@@ -59,7 +66,8 @@ def crawl(runner):
 class SpidersPipeline(object):
     """ Pipeline to transform spiders results into JobOffer objects and save them into the results object"""
     def process_item(self, item, spider):
-        results.append(JobOffer(item['url'], item['position'], "", item['company'], item['date'], item['tags']))
+        jobOffer = JobOffer(item['url'], item['position'], "", item['company'], item['date'], item['tags'])
+        results.append(jobOffer)
 
 if __name__ == '__main__':
     main()
