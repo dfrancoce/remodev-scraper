@@ -11,7 +11,9 @@ class Stackoverflow(object):
 
         job_offers = []
         for entry in feed.entries:
-            tags = self.extractTags(entry["tags"])
+            if 'tags' in entry:
+                tags = self.extractTags(entry["tags"])
+                
             job_offer = JobOffer(entry["link"], entry["title"], entry["description"], entry["author"], entry["updated"], tags)
             job_offers.append(job_offer)
         
