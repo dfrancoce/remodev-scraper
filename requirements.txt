@@ -3,3 +3,4 @@ feedparser==5.2.1
 pytest==3.6.3
 requests==2.21.0
 Twisted==19.2.1
+boto3==1.9.91

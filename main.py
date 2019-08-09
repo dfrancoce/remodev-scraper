@@ -1,60 +1,59 @@
-import requests
-import scrapy
 import json
 
-from twisted.internet import reactor, defer
 from scrapy.crawler import CrawlerRunner
 from scrapy.utils.project import get_project_settings
+from twisted.internet import reactor, defer
+
+import api
+import sqs_queue
+import rss
+from models import JobOffer
 from scraper.jobbie.spiders.europe_remotely_spider import EuropeRemotelySpider
 from scraper.jobbie.spiders.remotelist_io_spider import RemoteListIoSpider
-from api import Github
-from api import RemoteOk
-from rss import Stackoverflow
-from rss import WeWorkRemotely
-from models import JobOffer
 
 results = []
+SQS_QUEUE_URL = "https://sqs.us-east-1.amazonaws.com/291634056833/job_offers"
+
 
 def main():
     """ Runs collectors"""
-    runSpidersCollector()
-    runApisCollector()
-    runRsssCollector()
+    run_spiders_collector()
+    run_apis_collector()
+    run_rss_collector()
 
-    headers = {'Content-Type': 'application/json', 'Accept':'application/json'}
+    print ("heyyyyo")
     for jobOffer in results:
-        resultsJSON = json.dumps(jobOffer.__dict__)
-        requests.post('http://127.0.0.1:5000/jobs', json = resultsJSON, headers = headers)
+        results_json = json.dumps(jobOffer.__dict__)
+        print ("hey")
+        sqs_queue.send_sqs_message(SQS_QUEUE_URL, results_json)
 
-def runApisCollector():
+
+def run_apis_collector():
     """ Runs the API collectors and saves the collected job offers in the results object"""
-    github = Github()
-    remoteOk = RemoteOk()
-    
-    for item in github.get():
+    for item in api.get_from_github():
         results.append(item)
 
-    for item in remoteOk.get():
+    for item in api.get_from_remote_ok():
         results.append(item)
 
-def runRsssCollector():
+
+def run_rss_collector():
     """ Runs the rss collectors and saves the collected job offers in the results object"""
-    stackOverflow = Stackoverflow()
-    weWorkRemotely = WeWorkRemotely()
-
-    for item in stackOverflow.parse():
+    for item in rss.parse_stackoverflow():
         results.append(item)
 
-    for item in weWorkRemotely.parse():
+    for item in rss.parse_we_work_remotely():
         results.append(item)
-    
-def runSpidersCollector():
+
+
+def run_spiders_collector():
     """ Runs the spider collectors and saves the collected job offers in the results object"""
     settings = get_project_settings()
     settings['ITEM_PIPELINES'] = {'__main__.SpidersPipeline': 1}
     runner = CrawlerRunner(settings)
     crawl(runner)
     reactor.run()
+
 
 @defer.inlineCallbacks
 def crawl(runner):
@@ -63,11 +62,11 @@ def crawl(runner):
 
     reactor.stop()
 
-class SpidersPipeline(object):
-    """ Pipeline to transform spiders results into JobOffer objects and save them into the results object"""
-    def process_item(self, item, spider):
-        jobOffer = JobOffer(item['url'], item['position'], "", item['company'], item['date'], item['tags'])
-        results.append(jobOffer)
+
+def process_item(item, spider):
+    job_offer = JobOffer(item['url'], item['position'], "", item['company'], item['date'], item['tags'])
+    results.append(job_offer)
+
 
 if __name__ == '__main__':
     main()

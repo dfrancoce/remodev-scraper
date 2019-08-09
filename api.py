@@ -1,42 +1,41 @@
-import requests
 import json
-import urllib
+
+import requests
 
 from models import JobOffer
 
-class Github(object):
-    """ This class parses the response of the search for remote jobs in github """
 
-    def get(self):
-        """ Parses the github remote jobs API results into a list of JobOffer objects """
-        url = "https://jobs.github.com/positions.json?location=remote"
-        job_offers_json = getContentAsJson(url)
+def get_from_github():
+    """ Parses the github remote jobs API results into a list of JobOffer objects """
 
-        job_offers = []
-        for job in job_offers_json:
-            job_offer = JobOffer(job["url"], job["title"], job["description"], job["company"], job["created_at"], "")
-            job_offers.append(job_offer)
+    url = "https://jobs.github.com/positions.json?location=remote"
+    job_offers_json = get_content_as_json(url)
 
-        return job_offers
+    job_offers = []
+    for job in job_offers_json:
+        job_offer = JobOffer(job["url"], job["title"], job["description"], job["company"], job["created_at"], "")
+        job_offers.append(job_offer)
 
-class RemoteOk(object):
-    """ This class parses the response of the search for remote jobs in remoteok """
+    return job_offers
 
-    def get(self):
-        """ Parses the remoteok jobs API results into a list of JobOffer objects """
-        url = "https://remoteok.io/api"
-        job_offers_json = getContentAsJson(url)
 
-        job_offers = []
-        for job in job_offers_json:
-            if ('legal' in job):
-                continue
+def get_from_remote_ok():
+    """ Parses the remoteok jobs API results into a list of JobOffer objects """
 
-            job_offer = JobOffer(job["url"], job["position"], job["description"], job["company"], job["date"], job["tags"])
-            job_offers.append(job_offer)
+    url = "https://remoteok.io/api"
+    job_offers_json = get_content_as_json(url)
 
-        return job_offers
+    job_offers = []
+    for job in job_offers_json:
+        if 'legal' in job:
+            continue
 
-def getContentAsJson(url):
+        job_offer = JobOffer(job["url"], job["position"], job["description"], job["company"], job["date"], job["tags"])
+        job_offers.append(job_offer)
+
+    return job_offers
+
+
+def get_content_as_json(url):
     ret = requests.get(url)
     return json.loads(ret.content)
