@@ -21,11 +21,9 @@ def main():
     run_apis_collector()
     run_rss_collector()
 
-    print ("heyyyyo")
-    for jobOffer in results:
-        results_json = json.dumps(jobOffer.__dict__)
-        print ("hey")
-        sqs_queue.send_sqs_message(SQS_QUEUE_URL, results_json)
+    for job_offer in results:
+        job_offer_json = json.dumps(job_offer.__dict__)
+        sqs_queue.send_sqs_message(SQS_QUEUE_URL, job_offer_json)
 
 
 def run_apis_collector():
@@ -63,9 +61,13 @@ def crawl(runner):
     reactor.stop()
 
 
-def process_item(item, spider):
-    job_offer = JobOffer(item['url'], item['position'], "", item['company'], item['date'], item['tags'])
-    results.append(job_offer)
+class SpidersPipeline(object):
+    """ Pipeline to transform spiders results into JobOffer objects and save them into the results object"""
+
+    @staticmethod
+    def process_item(item, spider):
+        job_offer = JobOffer(item['url'], item['position'], "", item['company'], item['date'], item['tags'])
+        results.append(job_offer)
 
 
 if __name__ == '__main__':
