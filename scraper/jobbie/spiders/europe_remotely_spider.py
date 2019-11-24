@@ -1,5 +1,6 @@
 import scrapy
 
+from settings import get_config
 from ..items import Job
 
 
@@ -21,9 +22,9 @@ class EuropeRemotelySpider(scrapy.Spider):
     name = "europeRemotely"
 
     def start_requests(self):
-        urls = [
-            'https://europeremotely.com/remote-jobs/Programming'
-        ]
+        config = get_config()
+        url = config.get('spider').get('europeremotely')
+        urls = [url]
 
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)

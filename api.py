@@ -2,13 +2,15 @@ import json
 
 import requests
 
+from settings import get_config
 from models import JobOffer
 
 
 def get_from_github():
     """ Parses the github remote jobs API results into a list of JobOffer objects """
 
-    url = "https://jobs.github.com/positions.json?location=remote"
+    config = get_config()
+    url = config.get('api').get('github')
     job_offers_json = get_content_as_json(url)
 
     job_offers = []
@@ -22,7 +24,8 @@ def get_from_github():
 def get_from_remote_ok():
     """ Parses the remoteok jobs API results into a list of JobOffer objects """
 
-    url = "https://remoteok.io/api"
+    config = get_config()
+    url = config.get('api').get('remote_ok')
     job_offers_json = get_content_as_json(url)
 
     job_offers = []

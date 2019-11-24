@@ -1,11 +1,14 @@
 import feedparser
+
+from settings import get_config
 from models import JobOffer
 
 
 def parse_stackoverflow():
     """ Parses the results of the stackoverflow remote jobs search into a list of JobOffer objects """
 
-    url = "https://stackoverflow.com/jobs/feed?l=Remote&u=Km&d=20"
+    config = get_config()
+    url = config.get('rss').get('stackoverflow')
     feed = feedparser.parse(url)
 
     job_offers = []
@@ -33,7 +36,8 @@ def extract_tags(tags):
 def parse_we_work_remotely():
     """ Parses the results of the weworkremotely remote programming jobs into a list of JobOffer objects """
 
-    url = "https://weworkremotely.com/categories/remote-programming-jobs.rss"
+    config = get_config()
+    url = config.get('rss').get('weworkremotely')
     feed = feedparser.parse(url)
 
     job_offers = []
