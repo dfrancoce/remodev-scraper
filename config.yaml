@@ -1,0 +1,8 @@
+api:
+  github: "https://jobs.github.com/positions.json?location=remote"
+  remote_ok: "https://remoteok.io/api"
+rss:
+  stackoverflow: "https://stackoverflow.com/jobs/feed?l=Remote&u=Km&d=20"
+  weworkremotely: "https://weworkremotely.com/categories/remote-programming-jobs.rss"
+spider:
+  europeremotely: "https://europeremotely.com/remote-jobs/Programming"
