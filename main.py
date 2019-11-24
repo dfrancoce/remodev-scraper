@@ -4,15 +4,15 @@ from scrapy.crawler import CrawlerRunner
 from scrapy.utils.project import get_project_settings
 from twisted.internet import reactor, defer
 
+import os
 import api
 import sqs_queue
 import rss
 from models import JobOffer
 from scraper.jobbie.spiders.europe_remotely_spider import EuropeRemotelySpider
-from scraper.jobbie.spiders.remotelist_io_spider import RemoteListIoSpider
 
 results = []
-SQS_QUEUE_URL = "https://sqs.us-east-1.amazonaws.com/291634056833/job_offers"
+SQS_QUEUE_URL = os.environ['SQS_QUEUE_URL']
 
 
 def main():

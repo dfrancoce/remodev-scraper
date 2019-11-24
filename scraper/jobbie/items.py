@@ -7,6 +7,7 @@
 
 import scrapy
 
+
 class Job(scrapy.Item):
     """ A job contains the following properties:
         url: Url of the job offer
