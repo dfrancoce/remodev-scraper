@@ -1,3 +1,4 @@
+import logging
 import json
 
 from scrapy.crawler import CrawlerRunner
@@ -13,10 +14,14 @@ from scraper.jobbie.spiders.europe_remotely_spider import EuropeRemotelySpider
 
 results = []
 SQS_QUEUE_URL = os.environ['SQS_QUEUE_URL']
+LOGGING_FILENAME = os.environ['LOGGING_FILENAME']
+LOGGING_LEVEL = os.environ['LOGGING_LEVEL']
 
 
 def main():
     """ Runs collectors"""
+    setup_logging()
+
     run_spiders_collector()
     run_apis_collector()
     run_rss_collector()
@@ -24,6 +29,10 @@ def main():
     for job_offer in results:
         job_offer_json = json.dumps(job_offer.__dict__)
         sqs_queue.send_sqs_message(SQS_QUEUE_URL, job_offer_json)
+
+
+def setup_logging():
+    logging.basicConfig(filename=LOGGING_FILENAME, format='%(asctime)s %(levelname)s %(message)s', level=LOGGING_LEVEL)
 
 
 def run_apis_collector():
@@ -56,7 +65,6 @@ def run_spiders_collector():
 @defer.inlineCallbacks
 def crawl(runner):
     yield runner.crawl(EuropeRemotelySpider)
-    yield runner.crawl(RemoteListIoSpider)
 
     reactor.stop()
 
