@@ -2,6 +2,19 @@ import scrapy
 
 from ..items import Job
 
+
+def create_job(url, company, position, date, tags):
+    job = Job()
+
+    job["url"] = url
+    job["company"] = company
+    job["position"] = position
+    job["date"] = ''.join(date).strip()
+    job["tags"] = tags
+
+    return job
+
+
 class EuropeRemotelySpider(scrapy.Spider):
     """ This class crawls the remote jobs in europeRemotely """
 
@@ -18,14 +31,27 @@ class EuropeRemotelySpider(scrapy.Spider):
     def parse(self, response):
         jobs = []
 
-        for item in response.css("ul.regular-jobs li"):
-            job = Job()
-            job["url"] = item.css("div.left a::attr(href)").extract_first()
-            job["company"] = item.css("div.left span::text").extract_first()
-            job["position"] = item.css("div.left a::text").extract_first()
-            job["date"] = item.css("div.right::text").extract_first().strip()
-            job["tags"] = item.css("div.right a::text").extract()
+        for item in response.css("ul.sponsored-jobs li"):
+            jobs.append(
+                create_job(
+                    item.css("div.job-row__left_column a::attr(href)").extract_first(),
+                    item.css("div.job-row__right_column span.job-row__company::text").extract_first(),
+                    item.css("div.job-row__left_column a::text").extract_first(),
+                    item.css("div.job-row__right_column::text").extract(),
+                    item.css("div.job-row__tags a::text").extract()
+                )
+            )
 
-            jobs.append(job)
+        for item in response.css("ul.regular-jobs li"):
+            if item.css("li.expired").extract_first() is None:
+                jobs.append(
+                    create_job(
+                        item.css("div.job-row__left_column a::attr(href)").extract_first(),
+                        item.css("div.job-row__right_column span.job-row__company::text").extract_first(),
+                        item.css("div.job-row__left_column a::text").extract_first(),
+                        item.css("div.job-row__right_column::text").extract(),
+                        item.css("div.job-row__tags a::text").extract()
+                    )
+                )
         
         return jobs

@@ -1,4 +1,9 @@
-# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+/dev
+/venv
+.pytest_cache/
+.vscode/
+jobbie-collector.iml
+out/

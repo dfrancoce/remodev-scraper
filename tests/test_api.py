@@ -1,14 +1,13 @@
-import pytest
-from api import Github, RemoteOk
+import api
+
 
 def test_github_api():
-    github = Github()
-    job_offers = github.get()
+    job_offers = api.get_from_github()
 
     assert len(job_offers) > 0
 
-def test_remoteOk_api():
-    remoteOk = RemoteOk()
-    job_offers = remoteOk.get()
+
+def test_remote_ok_api():
+    job_offers = api.get_from_remote_ok()
 
     assert len(job_offers) > 0
