@@ -13,16 +13,16 @@ before_deploy:
 
 deploy:
   - provider: s3
-    access_key_id: AKIAUHZV6R2AX3X5HGPZ
+    access_key_id: $AWS_ACCESS_KEY
     secret_access_key: &1
-      secure: MzEfLr0wK0Zyd64cyOgeYgTiA/BAuxhkUtFeGyN58YWUlo92f7LuNvWwAG4uelU5MmEJpzsN4IFdIc0g235S1FtmCWNVSn142wjI2rImZIOw5FXQcTkbhc0BuXP8+WabLeRA8fLv7210Iw8wiWDC27vLu3rWT/K68fstgU+oRHI7X0VgyZ94SpW0P+2SR+Vo8NJhyC+ct4cPj6iZ8I7obS7GfPaVsM9kvF+EJp8X4uG57lbGYbe4mQw06cLV9wmuziY9GiUlPZ+7rTzxun31IlFlNPYogxrUgAc+nZYonbR8vefLbUMXPu1LmU27LbzuQ+BQYEbk3EFdnXhK3lc9sAq9wnxDcd0UrIqMMoOuf6t+fnyK/lXoaQ27idjm2vtalQ3py9klyGtuylaQ3HpbdZ/vX5IHG9oZnSHEnOrSQxhusIyn+V7pmbvGLaNwSCoYOpf2r4ydsUgiSzRCLbVQW5ATZLQAmAvoHOD5FL5erQ1PEDmcCFn2kGI0N5b+qSofQyLocCjvM9uOdeUA5Ru5mATt0sNXxHWUdYnf5Xkd/F7QpZy5qVGx++GJxVa3C9P7tePF3jLHh7vxKCeiaL1YF8K7E98aEBaPuEZFegHa1KwHMZMfmzKVhtxAgcsOKBFXC8BWPH0ZELR+5DkAfxlhWG2PKTxJ1qjt2fRbm1zj0a0=
+      secure: $AWS_SECRET_KEY
     local_dir: jobbie-collector-upload
     skip_cleanup: true
     on: &2
       repo: dfrancoce/jobbie-collector
     bucket: jobbie-collector
   - provider: codedeploy
-    access_key_id: AKIAUHZV6R2AX3X5HGPZ
+    access_key_id: $AWS_ACCESS_KEY
     secret_access_key: *1
     bucket: jobbie-collector
     key: latest.zip
