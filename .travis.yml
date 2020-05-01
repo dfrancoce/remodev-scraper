@@ -15,7 +15,7 @@ deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: &1
-      secure: $AWS_SECRET_KEY
+      secure: "Pm5lu8QMhJx7MC9KEcMtbmVxqTkwF2kclu1JWmzL0DWY/xPyTFPiJWQsk4s5Swb/lcHEdZHqpNTmLlH0cDIyLkDv4IRUA524ij1hAAmAZkKXidvMbd3CglC+fUWjzWeDdDWUrYF8Aubl8hGG4cZ2ANj20QGksx8PoB9p3RtSWWdRhQZw9iZtrlGyG4a2h+b7RXqe2jjIh/s8tFEEIECsGSGM9LbMJS31Hlc2g1adZD7XZUKFSxIFk2Z+Fg1ZFRjOBdleQAGur2F8s9xopgRDTC6UyB0KpBwnvZAp+iEsWP93pcs5bWshlocljHbrhnlX0P60vydAkc/CmKacy9+ko+T/o/DYxAGeZuBIHTqPM++cnf/wkT0ghRUIs6D79CLsg/cZOFFdFD+QOZ4p2ZLUqGSAFgvncrhrkM0hq5UkPvOBSpt+0OdvXpdnCv57/b1Wzkw7T5XHQQhj4gOK0iO0D0w4TgqsoCV1UIF1y+WnctX/gHxovAjUCRbozP+UEmxSZZMsA/oJLmtZWopjdG03da4nQL5ruDY0eLcIQSwJhXY/tViDPqZF9Z33yzQlo7dTozkPKeOoz5C+gOQvG/x6EkHz+JfuNzLpB+ig1JrfpNhUJuU1Gf2VXTpx+uha413kPW8zrlcn3iH9/IcFaOrmSOStF3MksvE5b/KwrKQsl30="
     local_dir: jobbie-collector-upload
     skip_cleanup: true
     on: &2
