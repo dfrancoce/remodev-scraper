@@ -5,6 +5,6 @@ files:
     destination: /usr/local/jobbie-collector/
 hooks:
   AfterInstall:
-    - location: /usr/local/jobbie-collector/scripts/install_dependencies
+    - location: scripts/install-dependencies.sh
       timeout: 300
       runas: root
