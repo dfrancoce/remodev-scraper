@@ -2,9 +2,4 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /usr/local/jobbie-collector/
-hooks:
-  AfterInstall:
-    - location: scripts/install-dependencies.sh
-      timeout: 300
-      runas: root
+    destination: /home/ec2-user/jobbie-collector/
